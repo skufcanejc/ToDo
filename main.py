@@ -50,9 +50,9 @@ while True:
 
             with open('todos.txt', 'w') as file:
                 file.writelines(todos)
-                
+
         case 'exit':
-            print("Tnx for the info, sucker!")
+            print("All done, see you later!")
             break
         case whatever:
-            print("What kind of shit is that, that's not what I asked you to do!")
+            print("That's not what I asked you to do, please enter one of the listed commands.")
