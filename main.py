@@ -9,25 +9,27 @@ while True:
     user_action = input('Type "add", "show", "edit", "complete" or "exit"')
     user_action = user_action.strip().lower()
 
-    match user_action:
+ #   used match user_action: and case 'add' etc before the if loop
 
-        case 'add':
-            todo = input("Enter a To-Do") +"\n"
+    if user_action.startswith("add"):
+        todo = user_action[4:]
+        todo = todo + "\n"
 
-            with open('todos.txt', 'r') as file:
-                todos = file.readlines()
+        with open('todos.txt', 'r') as file:
+            todos = file.readlines()
 
-            todos.append(todo)
+        todos.append(todo)
 
-            with open('todos.txt', 'w') as file:
-                file.writelines(todos)
+        with open('todos.txt', 'w') as file:
+            file.writelines(todos)
 
-        case 'show' | 'display':
-            print("Your To-Do's are as follows:")
-            todos_print()
+    elif user_action.startswith('show'):
+        print("Your To-Do's are as follows:")
+        todos_print()
 
-        case 'edit':
-            number = int(input("Whate # element do you want to switch?"))
+    elif user_action.startswith('edit'):
+        try:
+            number = int(user_action[5:])
             number = number -1
 
             with open('todos.txt', 'r') as file:
@@ -39,20 +41,34 @@ while True:
             with open('todos.txt', 'w') as file:
                 file.writelines(todos)
             todos_print()
+        except ValueError:
+            print("Command is invalid, please enter a number.")
+            continue
+        except IndexError:
+            print("The number you entered does not correspond to any To-Do")
+            continue
 
-        case 'complete':
-            todos_print()
+
+    elif user_action.startswith('complete'):
+        # todos_print()
+        try:
             with open('todos.txt', 'r') as file:
                 todos = file.readlines()
 
-            number = int(input("Which # item would you like to mark as done?"))
+            number = int(user_action[9:])
+            done_do = todos[number-1].rstrip("\n")
+            print(f'The item "{done_do}" has been completed and removed from the ToDo list.')
+
             todos.pop(number-1)
 
             with open('todos.txt', 'w') as file:
                 file.writelines(todos)
+        except IndexError:
+            print("There is no item with that number.")
+            continue
 
-        case 'exit':
-            print("All done, see you later!")
-            break
-        case whatever:
-            print("That's not what I asked you to do, please enter one of the listed commands.")
+    elif user_action.startswith('exit'):
+        print("All done, see you later")
+        break
+    else:
+        print("That's not what I asked you to do, please enter one of the listed commands.")
