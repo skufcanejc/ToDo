@@ -5,6 +5,16 @@ def todos_print():
             row = f"{i + 1} - {item}"
             print(row)
 
+def get_todos(filepath='todos.txt'):
+    with open(filepath,'r') as f:
+        todos_local = f.readlines()
+    return todos_local
+
+def write_todos(todos_arg, filepath='todos.txt'):
+    with open(filepath, 'w') as f:
+        f.writelines(todos_arg)
+
+
 while True:
     user_action = input('Type "add", "show", "edit", "complete" or "exit"')
     user_action = user_action.strip().lower()
@@ -15,13 +25,11 @@ while True:
         todo = user_action[4:]
         todo = todo + "\n"
 
-        with open('todos.txt', 'r') as file:
-            todos = file.readlines()
+        todos = get_todos()
 
         todos.append(todo)
 
-        with open('todos.txt', 'w') as file:
-            file.writelines(todos)
+        write_todos(todos_arg=todos, filepath='todos.txt')
 
     elif user_action.startswith('show'):
         print("Your To-Do's are as follows:")
@@ -32,14 +40,12 @@ while True:
             number = int(user_action[5:])
             number = number -1
 
-            with open('todos.txt', 'r') as file:
-                todos = file.readlines()
+            todos = get_todos()
 
             new_todo = input("Enter the new to-Do:")
             todos[number] = new_todo + "\n"
 
-            with open('todos.txt', 'w') as file:
-                file.writelines(todos)
+            write_todos(todos, 'todos.txt')
             todos_print()
         except ValueError:
             print("Command is invalid, please enter a number.")
@@ -52,8 +58,7 @@ while True:
     elif user_action.startswith('complete'):
         # todos_print()
         try:
-            with open('todos.txt', 'r') as file:
-                todos = file.readlines()
+            todos = get_todos()
 
             number = int(user_action[9:])
             done_do = todos[number-1].rstrip("\n")
@@ -61,11 +66,12 @@ while True:
 
             todos.pop(number-1)
 
-            with open('todos.txt', 'w') as file:
-                file.writelines(todos)
+            write_todos(todos, 'todos.txt')
         except IndexError:
             print("There is no item with that number.")
             continue
+        except ValueError:
+            print('Please input a number (like "1") .')
 
     elif user_action.startswith('exit'):
         print("All done, see you later")
