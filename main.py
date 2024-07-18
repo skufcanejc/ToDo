@@ -1,19 +1,5 @@
-def todos_print():
-    with open('todos.txt', 'r') as todos:
-        new_todos = [item.strip("\n") for item in todos]
-        for i, item in enumerate(new_todos):
-            row = f"{i + 1} - {item}"
-            print(row)
-
-def get_todos(filepath='todos.txt'):
-    with open(filepath,'r') as f:
-        todos_local = f.readlines()
-    return todos_local
-
-def write_todos(todos_arg, filepath='todos.txt'):
-    with open(filepath, 'w') as f:
-        f.writelines(todos_arg)
-
+#from functions import get_todos, write_todos, todos_print
+import functions
 
 while True:
     user_action = input('Type "add", "show", "edit", "complete" or "exit"')
@@ -25,28 +11,28 @@ while True:
         todo = user_action[4:]
         todo = todo + "\n"
 
-        todos = get_todos()
+        todos = functions.get_todos()
 
         todos.append(todo)
 
-        write_todos(todos_arg=todos, filepath='todos.txt')
+        function.write_todos(todos_arg=todos, filepath='todos.txt')
 
     elif user_action.startswith('show'):
         print("Your To-Do's are as follows:")
-        todos_print()
+        function.todos_print()
 
     elif user_action.startswith('edit'):
         try:
             number = int(user_action[5:])
             number = number -1
 
-            todos = get_todos()
+            todos = function.get_todos()
 
             new_todo = input("Enter the new to-Do:")
             todos[number] = new_todo + "\n"
 
-            write_todos(todos, 'todos.txt')
-            todos_print()
+            function.write_todos(todos, 'todos.txt')
+            function.todos_print()
         except ValueError:
             print("Command is invalid, please enter a number.")
             continue
@@ -58,7 +44,7 @@ while True:
     elif user_action.startswith('complete'):
         # todos_print()
         try:
-            todos = get_todos()
+            todos = function.get_todos()
 
             number = int(user_action[9:])
             done_do = todos[number-1].rstrip("\n")
@@ -66,7 +52,7 @@ while True:
 
             todos.pop(number-1)
 
-            write_todos(todos, 'todos.txt')
+            function.write_todos(todos, 'todos.txt')
         except IndexError:
             print("There is no item with that number.")
             continue
